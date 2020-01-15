@@ -10,7 +10,7 @@ from paragon_calc import ParagonCalc
 
 def main():
 
-    print "Content-type: text/html\r\n\r\n";
+    print('Content-type: text/html\r\n\r\n')
     form = cgi.FieldStorage()
     output = None
     goal = None
@@ -22,7 +22,7 @@ def main():
             seasonal = int(form.getvalue('seasonal'))
         elif form.getvalue('goal'):
             goal = int(form.getvalue('goal'))
-        paragon_file='./p10000.csv'
+        paragon_file = './p10000.csv'
         verbose = False
         paragons = ParagonCalc(
             paragon_seasonal=seasonal,
@@ -34,7 +34,7 @@ def main():
         if seasonal:
             output = paragons.get_paragon_total()
         else:
-           output = paragons.get_paragon_goal()
+            output = paragons.get_paragon_goal()
 
     print('''
 <HTML>
@@ -42,6 +42,7 @@ def main():
 <TITLE>D3 Paragon Calculator</TITLE>
 </HEAD>
 <BODY>
+<H1>D3 Paragon Calculator</H1>
 <P>
 <TABLE WIDTH=60% CELLPADDING=2 CELLSPACING=2>
 <FORM METHOD="POST" ACTION="/~jon/d3/paragon_tool.cgi">
@@ -60,8 +61,9 @@ Goal paragon and press Submit.
 The calculator\'s cap is 10,000 and is based on <A
 HREF="https://www.diablofans.com/forums/diablo-iii-general-forums/diablo-iii-general-discussion/130338-paragon-10000">Diablofans\'</A> chart.
 <BR>
-</P>
-</TD></TR>
+</TD></TR></TABLE>
+<P>
+<TABLE WIDTH=60% CELLPADDING=2 CELLSPACING=2>
 <TR><TD VALIGN="top">Non-Seasonal Paragon</TD><TD>
  <INPUT TYPE="number" NAME="non_seasonal" SIZE="1" MAXLENGTH="5">
 </TD></TR>
