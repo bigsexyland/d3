@@ -95,8 +95,6 @@ HREF="https://www.diablofans.com/forums/diablo-iii-general-forums/diablo-iii-gen
 
     if output:
         print('<TR><TD bgcolor="green"><B>{}</B></TD></TR>'.format(output))
-    else:
-        print('<TR><TD bgcolor="red"><B>Invalid input: {}</B></TD></TR>'.format(vars(paragons)))
 
     print('''
 </TABLE>
