@@ -14,6 +14,7 @@ def main():
     form = cgi.FieldStorage()
     output = None
     goal = None
+    halfway = None
     non_seasonal = None
     seasonal = None
     if form.getvalue('non_seasonal'):
@@ -22,19 +23,25 @@ def main():
             seasonal = int(form.getvalue('seasonal'))
         elif form.getvalue('goal'):
             goal = int(form.getvalue('goal'))
-        paragon_file = './p10000.csv'
-        verbose = False
-        paragons = ParagonCalc(
-            paragon_seasonal=seasonal,
-            paragon_non_seasonal=non_seasonal,
-            paragon_goal=goal,
-            paragon_file=paragon_file,
-            verbose=verbose,
-        )
-        if seasonal:
-            output = paragons.get_paragon_total()
-        else:
-            output = paragons.get_paragon_goal()
+    elif form.getvalue('halfway'):
+        halfway = int(form.getvalue('halfway'))
+
+    paragon_file = './p10000.csv'
+    verbose = False
+    paragons = ParagonCalc(
+        paragon_seasonal=seasonal,
+        paragon_non_seasonal=non_seasonal,
+        paragon_goal=goal,
+        paragon_halfway=halfway,
+        paragon_file=paragon_file,
+        verbose=verbose,
+    )
+    if seasonal:
+        output = paragons.get_paragon_total()
+    elif goal:
+        output = paragons.get_paragon_goal()
+    elif halfway:
+        output = paragons.get_paragon_halfway()
 
     print('''
 <HTML>
@@ -58,6 +65,10 @@ To calculate the Paragon you need this Season to reach
 your Goal Non Seasonal Paragon, enter your Non Seasonal and
 Goal paragon and press Submit.
 <P>
+To calculate the Halfway point to an arbitrary Paragon,
+enter that paragon and press Submit.  (Enter "1" to see a list of round-number
+milestones)
+<P>
 The calculator\'s cap is 10,000 and is based on <A
 HREF="https://www.diablofans.com/forums/diablo-iii-general-forums/diablo-iii-general-discussion/130338-paragon-10000">Diablofans\'</A> chart.
 <BR>
@@ -74,12 +85,18 @@ HREF="https://www.diablofans.com/forums/diablo-iii-general-forums/diablo-iii-gen
 <TR><TD VALIGN="top">Goal Paragon</TD><TD>
  <INPUT TYPE="number" NAME="goal" SIZE="1" MAXLENGTH="5">
 </TD></TR>
+<TR><TD VALIGN="top"> - OR -</TD><TD></TR>
+<TR><TD VALIGN="top">Halfway Paragon</TD><TD>
+ <INPUT TYPE="number" NAME="halfway" SIZE="1" MAXLENGTH="5">
+</TD></TR>
 <TR><TD>&nbsp;</TD><TD>
 <INPUT TYPE="submit" VALUE="Submit"></FORM></TD></TR>
           ''')
 
     if output:
         print('<TR><TD bgcolor="green"><B>{}</B></TD></TR>'.format(output))
+    else:
+        print('<TR><TD bgcolor="red"><B>Invalid input: {}</B></TD></TR>'.format(vars(paragons)))
 
     print('''
 </TABLE>
@@ -89,7 +106,8 @@ this project.
 </P>
 <P>
 <A HREF="https://github.com/bigsexyland/d3/">Source code</A> available.
-</P></TD></TR></TABLE>
+</P></TD></TR>
+</TABLE>
 </BODY>
 </HTML>
           ''')

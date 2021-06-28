@@ -3,6 +3,7 @@
 # Get total paragon by combining seasonal + non seasonal paragon
 # or seasonal paragon needed to reach non seasonal goal
 # It doesn't matter which is which, they are valued equally
+# Or find half-way point to arbitrary paragon
 
 import sys
 import argparse
@@ -20,6 +21,8 @@ def main():
                         help='Seasonal paragon (integer)')
     parser.add_argument('--non_seasonal', '-n', type=int,
                         help='Non Seasonal paragon (integer)')
+    parser.add_argument('--halfway', '-a', type=int,
+                        help='Paragon to find half-way point (integer)')
     parser.add_argument('--paragon_file', '-p', default='p10000.csv',
                         help='File with paragon definitions, csv')
     parser.add_argument('--verbose', '-v', action='store_true',
@@ -37,15 +40,16 @@ def main():
         print('\nYou must specify: -n <p> with -g\n')
         sys.exit(1)
 
-    if not (args.total or args.goal):
+    if not (args.total or args.goal or args.halfway):
         parser.print_help()
-        print('\nYou must specify either: -t -or -g\n')
+        print('\nYou must specify either: -t or -g or -a\n')
         sys.exit(1)
 
     paragons = ParagonCalc(
         paragon_seasonal=args.seasonal,
         paragon_non_seasonal=args.non_seasonal,
         paragon_goal=args.goal,
+        paragon_halfway=args.halfway,
         paragon_file=args.paragon_file,
         verbose=args.verbose,
     )
@@ -53,6 +57,8 @@ def main():
         output = paragons.get_paragon_total()
     elif args.goal:
         output = paragons.get_paragon_goal()
+    elif args.halfway:
+        output = paragons.get_paragon_halfway()
     print output
     sys.exit(0)
 

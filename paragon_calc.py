@@ -17,6 +17,7 @@ class ParagonCalc(object):
         paragon_seasonal,
         paragon_non_seasonal,
         paragon_goal,
+        paragon_halfway,
         paragon_file,
         verbose,
     ):
@@ -24,7 +25,9 @@ class ParagonCalc(object):
         self.paragon_seasonal = paragon_seasonal
         self.paragon_non_seasonal = paragon_non_seasonal
         self.paragon_goal = paragon_goal
+        self.paragon_halfway = paragon_halfway
         self.paragon_file = paragon_file
+        self.paragon_max = 10000
         self.verbose = verbose
         self._paragons = None
 
@@ -66,11 +69,10 @@ class ParagonCalc(object):
 
     def get_paragon_total(self):
         # Add seasonal + non seasonal to get total paragon level
-        # max of 10000 paragon since chart stops here
-        total = 10000
+        # Max of 10000 paragon since chart stops here
         xp_combined = self.paragons[self.paragon_seasonal]['total'] + self.paragons[self.paragon_non_seasonal]['total']
-        if xp_combined > self.paragons[total]['total']:
-            return('Seasonal: {} Non Seasonal: {} Total: {} (MAX)'.format(self.paragon_seasonal, self.paragon_non_seasonal, total))
+        if xp_combined > self.paragons[self.paragon_max]['total']:
+            return('Seasonal: {} Non Seasonal: {} Total: {} (MAX)'.format(self.paragon_seasonal, self.paragon_non_seasonal, self.paragon_max))
 
         if self.paragon_seasonal > self.paragon_non_seasonal:
             higher = self.paragon_seasonal
@@ -86,17 +88,16 @@ class ParagonCalc(object):
                     if self.verbose:
                         print('XP Combined: {} Total: {}'.format(xp_combined, total))
                     break
-        return('Seasonal: {} Non Seasonal: {} Total: {}'.format(self.paragon_seasonal, self.paragon_non_seasonal, total))
+        return('Non Seasonal: {} Seasonal: {} Total: {}'.format(self.paragon_non_seasonal, self.paragon_seasonal, total))
 
     def get_paragon_goal(self):
         # Get seasonal paragon needed to reach a non seasonal paragon goal
-        # max of 10000 paragon since chart stops here
-        max = 10000
+        # Max of 10000 paragon since chart stops here
         if self.paragon_goal <= self.paragon_non_seasonal:
             return('Goal: {} Non Seasonal: {} Goal already achieved!'.format(self.paragon_goal, self.paragon_non_seasonal))
 
-        if self.paragon_goal >= max:
-            self.paragon_goal = max
+        if self.paragon_goal >= self.paragon_max:
+            self.paragon_goal = self.paragon_max
 
         xp_current = self.paragons[self.paragon_non_seasonal]['total']
         xp_goal = self.paragons[self.paragon_goal]['total']
@@ -107,10 +108,39 @@ class ParagonCalc(object):
                 if self.verbose:
                     print('XP Goal: {} Paragon Goal: {}'.format(xp_goal, paragon_goal))
                 break
-        if self.paragon_goal >= max:
+        if self.paragon_goal >= self.paragon_max:
             return('Goal: {} (MAX) Non Seasonal: {} Seasonal Needed: {}'.format(self.paragon_goal, self.paragon_non_seasonal, paragon_goal))
         else:
             return('Goal: {} Non Seasonal: {} Seasonal Needed: {}'.format(self.paragon_goal, self.paragon_non_seasonal, paragon_goal))
+
+    def get_paragon_halfway(self):
+        # Get halfway point to desired paragon
+        # Handle special case '1' which returns 1000-10000 by thousands
+        if self.paragon_halfway != 1:
+            return self._get_paragon_halfway(self.paragon_halfway)
+        else:
+            thousands = ''
+            for thousand in xrange(1000,11000,1000):
+                thousands += self._get_paragon_halfway(thousand)
+                thousands += '<br>\n'
+            return thousands
+
+    def _get_paragon_halfway(self, halfway):
+        # Get halfway point to desired paragon passed as argument
+        level_half = None
+        total = 0
+        if halfway > self.paragon_max:
+            return('Halfway to {}: {} (MAX={})!'.format(halfway, level_half, self.paragon_max))
+        elif halfway < 2:
+            return('Halfway to {}: {} (MIN=2)!'.format(halfway, level_half, self.paragon_max))
+
+        xp_half = self.paragons[halfway]['total'] / 2
+        for level, data in self.paragons.iteritems():
+            total += data['next']
+            if xp_half <= total:
+                level_half = level
+                break
+        return('Halfway to {}: {}'.format(halfway, level_half))
 
 
 if __name__ == '__main__':
