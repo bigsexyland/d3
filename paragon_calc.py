@@ -6,6 +6,7 @@
 # Inspired by: https://www.d3bg.org/paragon-calculator/en.php
 # Data from: https://www.diablofans.com/forums/diablo-forums/diablo-iii-general-discussion/130338-paragon-10000
 # And: https://docs.google.com/spreadsheets/d/1MIVWYG18yayYU52xFPIH2iT-N_Yap3_UoQh_ZSHndlY/edit#gid=0
+# And: https://docs.google.com/spreadsheets/d/1Opipj41r5GBqVSVWW67cHiD0M8yJ_4-B7PKCDzoMq2s/edit?copiedFromTrash#gid=416995773
 
 import sys
 import csv
@@ -27,7 +28,7 @@ class ParagonCalc(object):
         self.paragon_goal = paragon_goal
         self.paragon_halfway = paragon_halfway
         self.paragon_file = paragon_file
-        self.paragon_max = 10000
+        self.paragon_max = 20000
         self.verbose = verbose
         self._paragons = None
 
@@ -69,7 +70,7 @@ class ParagonCalc(object):
 
     def get_paragon_total(self):
         # Add seasonal + non seasonal to get total paragon level
-        # Max of 10000 paragon since chart stops here
+        # Max of 20000 paragon since chart stops here
         xp_combined = self.paragons[self.paragon_seasonal]['total'] + self.paragons[self.paragon_non_seasonal]['total']
         if xp_combined > self.paragons[self.paragon_max]['total']:
             return('Seasonal: {} Non Seasonal: {} Total: {} (MAX)'.format(self.paragon_seasonal, self.paragon_non_seasonal, self.paragon_max))
@@ -92,7 +93,7 @@ class ParagonCalc(object):
 
     def get_paragon_goal(self):
         # Get seasonal paragon needed to reach a non seasonal paragon goal
-        # Max of 10000 paragon since chart stops here
+        # Max of 20000 paragon since chart stops here
         if self.paragon_goal <= self.paragon_non_seasonal:
             return('Goal: {} Non Seasonal: {} Goal already achieved!'.format(self.paragon_goal, self.paragon_non_seasonal))
 
@@ -115,7 +116,7 @@ class ParagonCalc(object):
 
     def get_paragon_halfway(self):
         # Get halfway point to desired paragon
-        # Handle special case '1' which returns 1000-10000 by thousands
+        # Handle special case '1' which returns 1000-20000 by thousands
         if self.paragon_halfway != 1:
             return self._get_paragon_halfway(self.paragon_halfway)
         else:

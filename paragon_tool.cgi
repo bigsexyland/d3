@@ -26,7 +26,7 @@ def main():
     elif form.getvalue('halfway'):
         halfway = int(form.getvalue('halfway'))
 
-    paragon_file = './p10000.csv'
+    paragon_file = './p20000.csv'
     verbose = False
     paragons = ParagonCalc(
         paragon_seasonal=seasonal,
@@ -69,8 +69,8 @@ To calculate the Halfway point to an arbitrary Paragon,
 enter that paragon and press Submit.  (Enter "1" to see a list of round-number
 milestones)
 <P>
-The calculator\'s cap is 10,000 and is based on <A
-HREF="https://www.diablofans.com/forums/diablo-iii-general-forums/diablo-iii-general-discussion/130338-paragon-10000">Diablofans\'</A> chart.
+The calculator\'s cap is 20,000 and is based on <A
+HREF="https://d3.maxroll.gg/resources/experience-explained#Paragon-Experience-Table">Maxroll's\'</A> chart.
 <BR>
 </TD></TR></TABLE>
 <P>

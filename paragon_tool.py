@@ -23,7 +23,7 @@ def main():
                         help='Non Seasonal paragon (integer)')
     parser.add_argument('--halfway', '-a', type=int,
                         help='Paragon to find half-way point (integer)')
-    parser.add_argument('--paragon_file', '-p', default='p10000.csv',
+    parser.add_argument('--paragon_file', '-p', default='p20000.csv',
                         help='File with paragon definitions, csv')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Print verbose output')
