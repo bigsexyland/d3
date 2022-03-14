@@ -121,7 +121,7 @@ class ParagonCalc(object):
             return self._get_paragon_halfway(self.paragon_halfway)
         else:
             thousands = ''
-            for thousand in xrange(1000, 21000, 1000):
+            for thousand in xrange(1000, self.paragon_max + 1000, 1000):
                 thousands += self._get_paragon_halfway(thousand)
                 thousands += '<br>\n'
             return thousands
